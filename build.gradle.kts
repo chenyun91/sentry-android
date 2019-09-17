@@ -6,6 +6,7 @@ plugins {
     java
     id("com.diffplug.gradle.spotless") version "3.24.2" apply true
     jacoco
+    `maven-publish`
 }
 
 configure<JavaPluginConvention> {
@@ -23,14 +24,90 @@ buildscript {
     }
 }
 
+object Version {
+    const val group = "io.sentry.android"
+    const val version = "2.0.0-SNAPSHOT"
+    const val artifact = "sentry-android"
+}
+subprojects {
+    apply {
+        plugin("maven-publish")
+    }
+
+    repositories {
+        mavenLocal()
+        google()
+        jcenter()
+        mavenCentral()
+    }
+
+//    val sourcesJar by tasks.creating(Jar::class) {
+//        dependsOn(tasks.classes)
+//        archiveClassifier.set("sources")
+//        from(sourceSets.main.get().allSource)
+//    }
+//
+//    val javadocJar by tasks.creating(Jar::class) {
+//        from(tasks.javadoc)
+//        archiveClassifier.set("javadoc")
+//    }
+//
+//    artifacts {
+//        archives(sourcesJar)
+//        archives(javadocJar)
+//    }
+//    tasks.register<Jar>("sourcesJar") {
+//        archiveClassifier.set("sources")
+//        from(sourceSets.main.get().allJava)
+//    }
+//
+//    tasks.register<Jar>("javadocJar") {
+//        archiveClassifier.set("javadoc")
+//        from(tasks.javadoc.get().destinationDir)
+//    }
+
+    publishing {
+
+        publications.create<MavenPublication>("maven") {
+            repositories {
+                mavenLocal()
+            }
+
+            pom {
+                description.set("Sentry SDK")
+                name.set("sentry")
+                url.set("https://sentry.io")
+                licenses {
+                    license {
+                        name.set("MIT License - 2019 Sentry")
+                        url.set("https://raw.githubusercontent.com/getsentry/sentry-android/master/LICENSE")
+                        distribution.set("repo")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("bruno-garcia")
+                        name.set("Bruno Garcia")
+                        email.set("bruno@sentry.io")
+                    }
+                }
+                scm {
+                    url.set("https://github.com/getsentry/sentry-android")
+                }
+            }
+        }
+    }
+}
 allprojects {
+
     repositories {
         google()
         jcenter()
         mavenCentral()
     }
-    group = "io.sentry"
-    version = "2.0.0-SNAPSHOT"
+
+    group = Version.group
+    version = Version.version
     tasks {
         withType<Test> {
             testLogging.showStandardStreams = true

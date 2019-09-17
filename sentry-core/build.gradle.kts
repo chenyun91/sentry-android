@@ -2,6 +2,7 @@ plugins {
     java
     kotlin("jvm")
     jacoco
+    `maven-publish`
 }
 
 dependencies {
@@ -17,6 +18,33 @@ configure<SourceSetContainer> {
 
 jacoco {
     toolVersion = "0.8.4"
+}
+
+tasks.register<Jar>("sourcesJar") {
+    archiveClassifier.set("sources")
+    from(sourceSets.main.get().allJava)
+}
+
+tasks.register<Jar>("javadocJar") {
+    archiveClassifier.set("javadoc")
+    from(tasks.javadoc.get().destinationDir)
+}
+
+publishing {
+
+    publications.withType<MavenPublication> {
+        repositories {
+            mavenLocal()
+        }
+
+        groupId = project.group as String?
+        artifactId = project.name
+        version = project.version as String?
+
+        from(components["java"])
+        artifact(tasks["sourcesJar"])
+        artifact(tasks["javadocJar"])
+    }
 }
 
 tasks.jacocoTestReport {
