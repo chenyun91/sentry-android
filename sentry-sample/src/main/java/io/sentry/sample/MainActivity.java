@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     findViewById(R.id.crash_from_java)
         .setOnClickListener(
             view -> {
-              throw new RuntimeException("Uncaught Exception from Java.");
+              throw new ExampleException();
             });
 
     findViewById(R.id.send_message)
@@ -33,8 +33,7 @@ public class MainActivity extends AppCompatActivity {
     findViewById(R.id.capture_exception)
         .setOnClickListener(
             view -> {
-              Sentry.captureException(
-                  new Exception(new Exception(new Exception("Some exception."))));
+              Sentry.captureException(new ExampleException());
             });
 
     findViewById(R.id.breadcrumb)
