@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Sentry Kotlin Sample</string>
+    <string name="capture_exception">capture exception</string>
+    <string name="crash_from_kotlin">crash from kotlin</string>
+</resources>

@@ -12,6 +12,8 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
+    Timber.plant(new Timber.DebugTree());
+
     Timber.i("Sentry.isEnabled() = %s", Sentry.isEnabled());
 
     findViewById(R.id.native_capture).setOnClickListener(view -> NativeSample.message());
